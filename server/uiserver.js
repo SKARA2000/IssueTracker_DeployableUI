@@ -35,7 +35,7 @@ if(enableHMR && (process.env.NODE_ENV !== 'production')){
     app.use(hotMiddleware(compiler));
 }
 
-const port = process.env.UI_SERVER_PORT||8000;
+const port = process.env.PORT||8000;
 
 if(!process.env.UI_API_ENDPOINT){
     process.env.UI_API_ENDPOINT = '/graphql';
