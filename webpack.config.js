@@ -1,0 +1,78 @@
+const path = require('path');
+const webpack = require('webpack');
+const NodeExternals = require('webpack-node-externals');
+
+const browserConfig = {
+    mode: 'development',
+    entry: { app: ['./browser/App.jsx'] },
+    output: {
+        filename: '[name].bundle.js',
+        path: path.resolve(__dirname, 'public'),
+        publicPath: '/',
+    },
+    module: {
+        rules: [
+            {
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            '@babel/preset-react',
+                        ],
+                    },
+                },
+            },
+        ],
+    },
+    optimization: {
+        splitChunks: {
+            name: 'vendor',
+            chunks: 'all',
+        },
+    },
+    devtool: 'source-map',
+    plugins: [
+        new webpack.DefinePlugin({
+            __isBrowser__: 'true',
+        }),
+    ],
+};
+
+const serverConfig = {
+    mode: 'development',
+    entry: {
+        server: ['./server/uiserver.js'],
+    },
+    target: 'node',
+    externals: [NodeExternals()],
+    output: {
+        filename: 'server.js',
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '/',
+    },
+    module: {
+        rules: [
+            {
+                test: /\.jsx?$/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            '@babel/preset-react',
+                        ],
+                    },
+                },
+            },
+        ],
+    },
+    devtool: 'source-map',
+    plugins: [
+        new webpack.DefinePlugin({
+            __isBrowser__: 'false',
+        }),
+    ],
+};
+
+module.exports = [browserConfig, serverConfig];
