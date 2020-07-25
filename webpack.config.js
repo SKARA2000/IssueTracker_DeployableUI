@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const NodeExternals = require('webpack-node-externals');
+const nodeExternals = require('webpack-node-externals');
 
 const browserConfig = {
     mode: 'development',
@@ -46,7 +46,7 @@ const serverConfig = {
         server: ['./server/uiserver.js'],
     },
     target: 'node',
-    externals: [NodeExternals()],
+    externals: [nodeExternals()],
     output: {
         filename: 'server.js',
         path: path.resolve(__dirname, 'dist'),
@@ -60,6 +60,9 @@ const serverConfig = {
                     loader: 'babel-loader',
                     options: {
                         presets: [
+                            ['@babel/preset-env', {
+                                targets: { node: '10' },
+                            }],
                             '@babel/preset-react',
                         ],
                     },

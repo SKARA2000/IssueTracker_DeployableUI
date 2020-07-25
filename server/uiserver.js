@@ -35,32 +35,32 @@ if(enableHMR && (process.env.NODE_ENV !== 'production')){
     app.use(hotMiddleware(compiler));
 }
 
+// app.use('/',express.static(path.resolve(__dirname,'public')))
+
 const port = process.env.PORT||8000;
 
 if(!process.env.UI_API_ENDPOINT){
-    process.env.UI_API_ENDPOINT = '/graphql';
+    process.env.UI_API_ENDPOINT = 'http://localhost:5000/graphql';
 }
 
 if(!process.env.UI_SERVER_API_ENDPOINT){
     process.env.UI_SERVER_API_ENDPOINT = process.env.UI_API_ENDPOINT;
 }
 
-
 app.get('/env.js', function(req,res){
     const env = { UI_API_ENDPOINT: process.env.UI_API_ENDPOINT };
     res.send(`window.ENV = ${JSON.stringify(env)}`);
-})
+});
 
 app.get('/bootstrap.min.css', function(req, res) {
     res.sendFile(path.resolve('node_modules/bootstrap/dist/css/bootstrap.min.css'));
 });
 
+app.use(express.static('public'));
+
 app.get('*', (req,res,next) => {
     render(req,res,next);
 })
-
-
-// app.use('/',express.static(path.resolve(__dirname,'public')));
 
 
 app.listen(port,function(){

@@ -29,8 +29,9 @@ async function render(req,res){
     const body = ReactDOMServer.renderToString(element);
     if(context.url){
         res.redirect(301, context.url);
+    }else{
+        res.send(template(body, resultData));
     }
-    res.send(template(body, resultData));
 }
 
 export default render;
